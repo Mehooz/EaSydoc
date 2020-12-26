@@ -78,10 +78,6 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">系统部署</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#project-layout">Project layout</a>
-    </li>
     </ul>
                     </li>
                 </ul>
@@ -117,20 +113,11 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="easy">EaSy项目文档</h1>
-<h2 id="commands">Commands</h2>
+                <h1 id="_1">系统部署</h1>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>使用nginx反向代理，将请求转到8080端口，将url与网页端页面绑定</li>
+<li>实现docker部署</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
               
             </div>
           </div>

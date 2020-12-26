@@ -66,9 +66,13 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">系统设计</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">前端设计</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#project-layout">Project layout</a>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">后端设计</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">数据库</a>
+    </li>
+        </ul>
     </li>
     </ul>
                     </li>
@@ -117,20 +121,21 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="easy">EaSy项目文档</h1>
-<h2 id="commands">Commands</h2>
+                <h1 id="_1">系统设计</h1>
+<h2 id="_2">前端设计</h2>
+<h2 id="_3">后端设计</h2>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>整体架构：后端分为功能模块和测试模块，其中功能模块分三层：数据库层，Services层和Controller层，分别对应数据库的定义和操作，后端功能逻辑的定义以及对请求处理的定义；测试模块使用MockMVC对Controller的每一个单元进行测试。</li>
+<li>逻辑建模：
+根据权限可以大致分成两部分：登录功能和非登录功能，顾名思义，前者是要求登录的，对于没有登录Cookie的请求自动跳转到登录界面（我们使用一个PreHandler来处理），而后者则是不登录也可以访问的界面对应的接口。
+此外，我们对于管理员和主办方都有细致的权限划分，普通用户不能访问两者的许多接口，主办方也不能访问一些管理员的接口。</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+<p>我们在项目中使用github wiki来维护api，具体可见<a href="https://github.com/Mehooz/EaSy/wiki">这里</a>。</p>
+<h3 id="_4">数据库</h3>
+<p>根据用户故事地图，我们主要设计了以下类，作为在数据库表：
+- 针对三种用户，有<code>Student/Admin/Sponsor</code>类，全部继承<code>User</code>基类，对应学生、管理员和主办方三种用户；
+- 对于组队参赛相关的事宜，我们创建<code>Team, Game, Team_student, Record</code>，分别对应队伍，比赛，队员和参赛记录。这里恰当使用<code>@ManytoMany</code>注解来维护在数据库中的级联关系，而“主办方发布赛事”这里逻辑带来的<code>Game</code>和<code>Sponsor</code>的逻辑则是<code>@OnetoMany</code>。
+- <code>Submission</code>代表提交记录，<code>Message</code>代表站内消息。</p>
               
             </div>
           </div>

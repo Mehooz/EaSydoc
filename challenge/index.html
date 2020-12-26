@@ -70,9 +70,11 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">重难点分析</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">面向用户类型的工作解耦</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#project-layout">Project layout</a>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">复杂关系在数据库中的处理</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">定时变更状态</a>
     </li>
     </ul>
                     </li>
@@ -117,20 +119,19 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="easy">EaSy项目文档</h1>
-<h2 id="commands">Commands</h2>
+                <h1 id="_1">重难点问题及解决方法</h1>
+<h3 id="_2">面向用户类型的工作解耦</h3>
+<p>由于我们有多种不同的用户，在实际应用环境中，当某一方网站需要进行维护时，另一方能继续使用自己需要的相关功能而不受影响，管理员平台具有严格的权限控制。另外，为了实现开发过程中便于分工，我们也需要将前端功能合理分成两大块：用户平台和管理员平台。</p>
+<h3 id="_3">复杂关系在数据库中的处理</h3>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>由于平台逻辑关系的复杂性和强关联性，不同表中存储的相同数据可能出现数据不一致现象。解决办法为为这类数据添加外键，防止子表引用父表中不存在的表项，并添加级联，使得父表项更新或删除时子表项会自动更新和删除。这里需要注意一对多和多对多的关系处理，具体如下图。
+<img alt="data" src="/data.png" /></li>
+<li>除了前面提到的使用外键和将关系抽离出来之外，还要尽量减少内存中不必要的拷贝，能从数据库读取的就不要留下；例如对“某个队伍参加某比赛”这一行为的记录就不要单独记录比赛名称（String）之类的信息，而是保存指针，不然活动更改名字了就比较难保证一致性。</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+<h3 id="_4">定时变更状态</h3>
+<ul>
+<li>如何实现定时的持久化和时间到了自动变更比赛状态（如“可报名”、“已结束”）是一大难题。我们实现了一个定时器，到0点00分1秒时更新状态，这样就能保证每个比赛各阶段的衔接是准确无误的。</li>
+</ul>
               
             </div>
           </div>
